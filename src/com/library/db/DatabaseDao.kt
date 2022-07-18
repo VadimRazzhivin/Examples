@@ -1,0 +1,42 @@
+package com.library.db
+
+import com.library.db.entities.BookEntity
+import com.library.db.entities.ClientEntity
+import com.library.db.entities.OwnershipEntity
+
+class DatabaseDao(private val database: Database) {
+
+    fun getAllClients(): Set<ClientEntity> {
+        return database.clients
+    }
+
+    fun getAllBooks(): Set<BookEntity> {
+        return database.books
+    }
+
+    fun getOwnershipInfo(): Set<OwnershipEntity> {
+        return database.ownership
+    }
+
+    fun addBookToClient(clientId: String, bookId: String) {
+        var ownership: OwnershipEntity? = database.ownership
+            .firstOrNull { it.client.id == clientId }
+        val book = database.books.first { it.id == bookId }
+        if (ownership != null) {
+            ownership.booksInUse.add(book)
+        } else {
+            val client = database.clients.first { it.id == clientId }
+            ownership = OwnershipEntity(
+                client = client,
+                booksInUse = mutableSetOf(book),
+            )
+        }
+        database.ownership.add(ownership)
+    }
+
+    fun confiscateBooks(clientId: String) {
+        database.ownership.firstOrNull { it.client.id == clientId }?.let {
+            database.ownership.remove(it)
+        }
+    }
+}
