@@ -16,22 +16,6 @@ class Repository(
         return dao.getAllClients().map { it.toClient() }
     }
 
-    private fun BookEntity.toBook(): Book {
-        return Book(
-            id = id,
-            title = title,
-            year = year,
-        )
-    }
-
-    private fun ClientEntity.toClient(): Client {
-        return Client(
-            id = id,
-            surname = surname,
-            name = name,
-        )
-    }
-
     fun clientWithoutBooksAndWishes(client: Client): Boolean {
         val clientsWithBooks = clientsWithBooks(client)
         val wishABook = wishGenerator.wishBooks[client.id]?.isNotEmpty() == true
@@ -44,7 +28,7 @@ class Repository(
         return ownershipEntity != null
     }
 
-    fun randomBookOrNull(): Book? {
+    fun randomAvailableBookOrNull(): Book? {
         val booksInUse = dao.getOwnershipInfo().flatMap { it.booksInUse }
         return dao.getAllBooks().firstOrNull {
             !booksInUse.contains(it)
@@ -72,5 +56,21 @@ class Repository(
         wishGenerator.wishBooks[client.id]?.removeIf {
             it.id == book.id
         }
+    }
+
+    private fun BookEntity.toBook(): Book {
+        return Book(
+            id = id,
+            title = title,
+            year = year,
+        )
+    }
+
+    private fun ClientEntity.toClient(): Client {
+        return Client(
+            id = id,
+            surname = surname,
+            name = name,
+        )
     }
 }

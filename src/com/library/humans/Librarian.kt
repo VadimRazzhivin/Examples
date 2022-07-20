@@ -121,7 +121,7 @@ class Librarian(
             private val repository: Repository,
         ) : Task() {
             override fun execute(): Result {
-                val randomBook: Book? = repository.randomBookOrNull()
+                val randomBook: Book? = repository.randomAvailableBookOrNull()
 
                 if (randomBook == null) {
                     println("К сожалению книг нет.")
