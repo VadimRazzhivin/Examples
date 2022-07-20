@@ -6,3 +6,5 @@ data class OwnershipEntity(
     val client: ClientEntity,
     val booksInUse: MutableSet<BookEntity>,
 ) : Serializable
+
+
