@@ -6,6 +6,8 @@ import com.library.db.DatabaseManager
 import com.library.db.repository.Repository
 import com.library.db.repository.WishGenerator
 import com.library.humans.Librarian
+import com.library.utills.ConsoleColors
+import com.library.utills.colorPrintln
 import kotlin.concurrent.thread
 import kotlin.random.Random
 
@@ -62,9 +64,12 @@ fun main() {
 
     databaseManager.updateDatabase(database)
 
-    println("After modifications ownership.size = [${database.ownership.size}]")
-    println("Saved in file database with ownership.size = [${databaseManager.getDatabase().ownership.size}]")
+    val afterUpdateSize = database.ownership.size
+    val afterSavingSize = databaseManager.getDatabase().ownership.size
+    colorPrintln(if (afterSavingSize == afterUpdateSize) ConsoleColors.GREEN_BOLD else ConsoleColors.RED_BOLD) {
+        "\nAfter modifications ownership.size = [$afterUpdateSize]\n" +
+                "Saved in file database with ownership.size = [$afterSavingSize]\n"
+    }
 
     println("FINISH")
 }
-
