@@ -4,6 +4,7 @@ import com.library.core.Library
 import com.library.db.DatabaseDao
 import com.library.db.DatabaseManager
 import com.library.db.repository.Repository
+import com.library.db.repository.WishGenerator
 import com.library.humans.Librarian
 import kotlin.concurrent.thread
 import kotlin.random.Random
@@ -30,12 +31,14 @@ import kotlin.random.Random
  * Создаем проект на github + VCS
  */
 fun main() {
+
+    println("START")
+
     val databaseManager = DatabaseManager()
     val database = databaseManager.getDatabase()
-    val dao = DatabaseDao(database)
-    val repository = Repository(dao)
-
-    println("Start ${database.ownership.size}")
+    val dao = DatabaseDao(database = database)
+    val wishGenerator = WishGenerator(dao = dao)
+    val repository = Repository(dao = dao, wishGenerator = wishGenerator)
 
     val library = Library(repository = repository)
     val librarians = listOf(
@@ -59,7 +62,8 @@ fun main() {
 
     databaseManager.updateDatabase(database)
 
-    println("Finish ${database.ownership.size}")
+    println("After modifications ownership.size = [${database.ownership.size}]")
+    println("Saved in file database with ownership.size = [${databaseManager.getDatabase().ownership.size}]")
 
     println("FINISH")
 }

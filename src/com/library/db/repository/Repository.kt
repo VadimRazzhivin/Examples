@@ -6,23 +6,11 @@ import com.library.db.entities.BookEntity
 import com.library.db.entities.ClientEntity
 import com.library.db.entities.OwnershipEntity
 import com.library.humans.Client
-import kotlin.random.Random
 
-class Repository(private val dao: DatabaseDao) {
-
-    /**
-     * key = client.id
-     * value = wish books
-     */
-    private val wishBooks: Map<String, MutableSet<BookEntity>> by lazy {
-        dao.getAllClients().map { it.id }.associateWith {
-            if (Random.nextBoolean()) {
-                mutableSetOf(dao.getAllBooks().random())
-            } else {
-                mutableSetOf()
-            }
-        }
-    }
+class Repository(
+    private val dao: DatabaseDao,
+    private val wishGenerator: WishGenerator,
+) {
 
     fun clients(): List<Client> {
         return dao.getAllClients().map { it.toClient() }
@@ -46,7 +34,7 @@ class Repository(private val dao: DatabaseDao) {
 
     fun clientWithoutBooksAndWishes(client: Client): Boolean {
         val clientsWithBooks = clientsWithBooks(client)
-        val wishABook = wishBooks[client.id]?.isNotEmpty() == true
+        val wishABook = wishGenerator.wishBooks[client.id]?.isNotEmpty() == true
         return !clientsWithBooks && wishABook
     }
 
@@ -72,7 +60,7 @@ class Repository(private val dao: DatabaseDao) {
     }
 
     fun wishBooks(client: Client): List<Book> {
-        return wishBooks[client.id].orEmpty().map { it.toBook() }
+        return wishGenerator.wishBooks[client.id].orEmpty().map { it.toBook() }
     }
 
     fun isBookAvailable(book: Book): Boolean {
@@ -81,7 +69,7 @@ class Repository(private val dao: DatabaseDao) {
     }
 
     fun removeFromWishes(client: Client, book: Book) {
-        wishBooks[client.id]?.removeIf {
+        wishGenerator.wishBooks[client.id]?.removeIf {
             it.id == book.id
         }
     }
