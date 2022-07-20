@@ -34,7 +34,7 @@ import kotlin.random.Random
  */
 fun main() {
 
-    println("START")
+    colorPrintln(ConsoleColors.BLUE_BOLD) { "\nSTART\n" }
 
     val databaseManager = DatabaseManager()
     val database = databaseManager.getDatabase()
@@ -54,7 +54,7 @@ fun main() {
 
     val clientsThread = thread(name = "Client thread") {
         clients.forEach { client ->
-            println("\t`${client.name} ${client.surname}` зашел в библиотеку.")
+            colorPrintln(ConsoleColors.GREEN) { "`${client.name} ${client.surname}` зашел в библиотеку." }
             library.clientVisit(client)
             Thread.sleep(Random.nextLong(10, 16))
         }
@@ -71,5 +71,5 @@ fun main() {
                 "Saved in file database with ownership.size = [$afterSavingSize]\n"
     }
 
-    println("FINISH")
+    colorPrintln(ConsoleColors.BLUE_BOLD) { "\nFINISH\n" }
 }

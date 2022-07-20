@@ -13,8 +13,8 @@ class Librarian(
 
     val workWithClient = AtomicBoolean(false)
 
-    override val startMessage: String = "\t`${this.name} ${this.surname}` на рабочем месте"
-    override val endMessage: String = "\t\t\t`${this.name} ${this.surname}` окончила работу"
+    override val startMessage: String = "`${this.name} ${this.surname}` на рабочем месте"
+    override val endMessage: String = "`${this.name} ${this.surname}` окончила работу"
 
     fun confiscateBooks(client: Client) {
         this.workWithClient.set(true)

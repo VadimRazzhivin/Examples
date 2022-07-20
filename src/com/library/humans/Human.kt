@@ -1,5 +1,7 @@
 package com.library.humans
 
+import com.library.utills.ConsoleColors
+import com.library.utills.colorPrintln
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.concurrent.thread
@@ -21,7 +23,7 @@ abstract class Human<R : Human.Task.Result, T : Human.Task<R>>(
 
     init {
         thread = thread(name = "Thread human {$id}") {
-            startMessage?.let { println(it) }
+            startMessage?.let { colorPrintln(ConsoleColors.GREEN) { it } }
             while (work.get()) {
                 val task: T? = commandQueue.poll()
                 task?.execute()?.let(::onResult)
@@ -33,7 +35,7 @@ abstract class Human<R : Human.Task.Result, T : Human.Task<R>>(
     fun finish() {
         work.set(false)
         thread.join()
-        endMessage?.let { println(it) }
+        endMessage?.let { colorPrintln(ConsoleColors.CYAN) { it } }
     }
 
     fun await() {

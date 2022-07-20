@@ -9,7 +9,7 @@ data class Client(
 ) : Human<Client.Result, Client.Task>(id, name, surname) {
 
     override val startMessage: String? = null
-    override val endMessage: String = "\t\t\t`${this.name} ${this.surname}` покинул библиотеку."
+    override val endMessage: String = "`${this.name} ${this.surname}` покинул библиотеку."
 
     override fun onResult(result: Result) {
         when (result) {
