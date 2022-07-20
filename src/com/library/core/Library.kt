@@ -22,7 +22,7 @@ class Library(val repository: Repository) {
                 firstAvailableLibrarian.confiscateBooks(client)
             }
             else -> {
-                firstAvailableLibrarian.giveBookIfPossible(client)
+                firstAvailableLibrarian.giveBooksIfPossible(client)
             }
         }
     }

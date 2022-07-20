@@ -17,12 +17,14 @@ data class Client(
         }
     }
 
-    fun decisionToBorrowABook(librarian: Librarian) {
-        if (Random.nextBoolean()) {
+    fun decisionToBorrowABook(librarian: Librarian): Boolean {
+        return if (Random.nextBoolean()) {
+            println("`${this.name} ${this.surname}` согласился на предложение.")
             addTask(Task.TakeTheOfferedBook(client = this, librarian = librarian))
+            true
         } else {
             println("`${this.name} ${this.surname}` отказался от предложения.")
-            librarian.releaseTheClient(this)
+            false
         }
     }
 
