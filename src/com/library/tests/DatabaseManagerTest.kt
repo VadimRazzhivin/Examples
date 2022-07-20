@@ -1,43 +1,34 @@
 package com.library.tests
 
+import com.library.db.DatabaseDao
 import com.library.db.DatabaseManager
-import com.library.db.entities.BookEntity
-import com.library.db.entities.ClientEntity
-import com.library.db.entities.OwnershipEntity
 
 
 object DatabaseManagerTest {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        test()
+        `Given database When change ownership And update database Then assert old database ownership equals new database ownership`()
     }
 
-    private fun test() {
+    private fun `Given database When change ownership And update database Then assert old database ownership equals new database ownership`() {
+        // SET UP
         val path = "src/com/library/test.db"
         val databaseManager = DatabaseManager(path)
-        val testDb = databaseManager.getDatabase()
-        testDb.ownership.clear()
-        testDb.ownership.add(
-            OwnershipEntity(
-                ClientEntity(
-                    id = "testId",
-                    name = "testName",
-                    surname = "testSurname",
-                ),
-                mutableSetOf(
-                    BookEntity(
-                        id = "testId",
-                        title = "testTitle",
-                        year = "testYear",
-                    ),
-                ),
-            ),
+        val dbBeforeUpdate = databaseManager.getDatabase()
+        val dao = DatabaseDao(dbBeforeUpdate)
+
+        // TEST
+        dao.addBookToClient(
+            clientId = dao.getAllClients().random().id,
+            bookId = dao.getAllBooks().random().id,
         )
-        databaseManager.updateDatabase(testDb)
-        val newDb = databaseManager.getDatabase()
-        require(newDb.ownership == testDb.ownership) {
-            "Different sizes"
+        dao.confiscateBooks(dao.getOwnershipInfo().random().client.id)
+        databaseManager.updateDatabase(dbBeforeUpdate)
+
+        val dbAfterUpdate = databaseManager.getDatabase()
+        require(dbAfterUpdate.ownership == dbBeforeUpdate.ownership) {
+            "Different ownership"
         }
     }
 }
