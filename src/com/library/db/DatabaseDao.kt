@@ -7,15 +7,15 @@ import com.library.db.entities.OwnershipEntity.Companion.assign
 
 class DatabaseDao(private val database: Database) {
 
-    fun getAllClients(): Set<ClientEntity> {
+    fun getAllClients(): List<ClientEntity> {
         return database.clients
     }
 
-    fun getAllBooks(): Set<BookEntity> {
+    fun getAllBooks(): List<BookEntity> {
         return database.books
     }
 
-    fun getOwnershipInfo(): Set<OwnershipEntity> {
+    fun getOwnershipInfo(): List<OwnershipEntity> {
         return database.ownership
     }
 

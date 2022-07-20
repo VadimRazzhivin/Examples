@@ -45,8 +45,8 @@ class DatabaseManager(private val path: String = DB_PATH) {
     }
 
     private fun createNewDatabase(): Database {
-        val clients = Collections.synchronizedSet(
-            mutableSetOf(
+        val clients = Collections.synchronizedList(
+            mutableListOf(
                 ClientEntity(
                     id = "LC-001",
                     name = "Вася",
@@ -150,8 +150,8 @@ class DatabaseManager(private val path: String = DB_PATH) {
             )
         )
 
-        val books = Collections.synchronizedSet(
-            mutableSetOf(
+        val books = Collections.synchronizedList(
+            mutableListOf(
                 BookEntity(id = "LB-001", title = "Книга-Нига", year = "2018"),
                 BookEntity(id = "LB-002", title = "Книга-Нига", year = "2018"),
                 BookEntity(id = "LB-003", title = "Книга-Нига", year = "2018"),
@@ -209,7 +209,7 @@ class DatabaseManager(private val path: String = DB_PATH) {
 
         val booksForRandom = books.toMutableList()
 
-        val ownership = Collections.synchronizedSet(
+        val ownership = Collections.synchronizedList(
             clients.mapNotNull {
                 if (Random.nextBoolean()) {
                     val bookInUse = booksForRandom.randomOrNull()
@@ -218,7 +218,7 @@ class DatabaseManager(private val path: String = DB_PATH) {
                 } else {
                     null
                 }
-            }.toMutableSet()
+            }.toMutableList()
         )
 
         return Database(

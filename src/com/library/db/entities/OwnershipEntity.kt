@@ -5,20 +5,20 @@ import java.util.*
 
 data class OwnershipEntity(
     val client: ClientEntity,
-    val booksInUse: MutableSet<BookEntity>,
+    val booksInUse: MutableList<BookEntity>,
 ) : Serializable {
     companion object {
-        infix fun ClientEntity.assign(books: MutableSet<BookEntity>): OwnershipEntity {
+        infix fun ClientEntity.assign(books: MutableList<BookEntity>): OwnershipEntity {
             return OwnershipEntity(
                 client = this,
-                booksInUse = Collections.synchronizedSet(books),
+                booksInUse = Collections.synchronizedList(books),
             )
         }
 
         infix fun ClientEntity.assign(books: BookEntity): OwnershipEntity {
             return OwnershipEntity(
                 client = this,
-                booksInUse = Collections.synchronizedSet(mutableSetOf(books)),
+                booksInUse = Collections.synchronizedList(mutableListOf(books)),
             )
         }
     }

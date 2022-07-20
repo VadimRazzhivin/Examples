@@ -6,8 +6,8 @@ import com.library.db.entities.OwnershipEntity
 import java.io.Serializable
 
 data class Database(
-    val books: MutableSet<BookEntity>,
-    val clients: MutableSet<ClientEntity>,
-    val ownership: MutableSet<OwnershipEntity>,
+    val books: MutableList<BookEntity>,
+    val clients: MutableList<ClientEntity>,
+    val ownership: MutableList<OwnershipEntity>,
 ) : Serializable
 

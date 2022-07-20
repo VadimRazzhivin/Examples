@@ -11,13 +11,13 @@ class WishGenerator(private val dao: DatabaseDao) {
      * key = client.id
      * value = wish books
      */
-    val wishBooks: Map<String, MutableSet<BookEntity>> by lazy {
+    val wishBooks: Map<String, MutableList<BookEntity>> by lazy {
         dao.getAllClients().map { it.id }.associateWith {
-            Collections.synchronizedSet(
+            Collections.synchronizedList(
                 if (Random.nextBoolean()) {
-                    mutableSetOf(dao.getAllBooks().random())
+                    mutableListOf(dao.getAllBooks().random())
                 } else {
-                    mutableSetOf()
+                    mutableListOf()
                 }
             )
         }
