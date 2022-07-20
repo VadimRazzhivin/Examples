@@ -36,7 +36,7 @@ class DatabaseManager(private val path: String = DB_PATH) {
         return File(path).exists()
     }
 
-    private fun readDatabaseFromFile(): Database {
+    fun readDatabaseFromFile(): Database {
         val file = File(path)
         return ObjectInputStream(BufferedInputStream(FileInputStream(file))).use {
             it.readObject() as Database

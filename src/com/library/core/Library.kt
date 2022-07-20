@@ -15,7 +15,7 @@ class Library(val repository: Repository) {
     fun clientVisit(client: Client) {
         val firstAvailableLibrarian = firstAvailableLibrarian()
         when {
-            repository.clientWithoutBooksAndWishes(client) -> {
+            repository.clientWithoutBooksAndWishes(client)-> {
                 firstAvailableLibrarian.offerBook(client)
             }
             repository.clientsWithBooks(client) -> {

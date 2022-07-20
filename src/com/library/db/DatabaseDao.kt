@@ -3,40 +3,45 @@ package com.library.db
 import com.library.db.entities.BookEntity
 import com.library.db.entities.ClientEntity
 import com.library.db.entities.OwnershipEntity
+import java.util.*
 
 class DatabaseDao(private val database: Database) {
 
+    private val clients = Collections.synchronizedSet(database.clients)
+    private val books = Collections.synchronizedSet(database.books)
+    private val ownership = Collections.synchronizedSet(database.ownership)
+
     fun getAllClients(): Set<ClientEntity> {
-        return database.clients
+        return clients
     }
 
     fun getAllBooks(): Set<BookEntity> {
-        return database.books
+        return books
     }
 
     fun getOwnershipInfo(): Set<OwnershipEntity> {
-        return database.ownership
+        return ownership
     }
 
     fun addBookToClient(clientId: String, bookId: String) {
-        var ownership: OwnershipEntity? = database.ownership
+        var ownershipRefresh: OwnershipEntity? = ownership
             .firstOrNull { it.client.id == clientId }
-        val book = database.books.first { it.id == bookId }
-        if (ownership != null) {
-            ownership.booksInUse.add(book)
+        val book = books.first { it.id == bookId }
+        if (ownershipRefresh != null) {
+            ownershipRefresh.booksInUse.add(book)
         } else {
-            val client = database.clients.first { it.id == clientId }
-            ownership = OwnershipEntity(
+            val client = clients.first { it.id == clientId }
+            ownershipRefresh = OwnershipEntity(
                 client = client,
                 booksInUse = mutableSetOf(book),
             )
         }
-        database.ownership.add(ownership)
+        ownership.add(ownershipRefresh)
     }
 
     fun confiscateBooks(clientId: String) {
-        database.ownership.firstOrNull { it.client.id == clientId }?.let {
-            database.ownership.remove(it)
+        ownership.firstOrNull { it.client.id == clientId }?.let {
+            ownership.remove(it)
         }
     }
 }

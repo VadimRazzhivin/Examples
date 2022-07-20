@@ -36,7 +36,6 @@ fun main() {
     val repository = Repository(dao)
 
     println("Start ${database.ownership.size}")
-
     val library = Library(repository = repository)
     val librarians = listOf(
         Librarian(id = "LM-001", name = "Мотя", surname = "Букварёва", repository = repository),
@@ -58,7 +57,7 @@ fun main() {
     library.finish(clients)
 
     databaseManager.updateDatabase(database)
-
+    println("ФИНИШ ${databaseManager.readDatabaseFromFile().ownership.size}")
     println("Finish ${database.ownership.size}")
 
     println("FINISH")

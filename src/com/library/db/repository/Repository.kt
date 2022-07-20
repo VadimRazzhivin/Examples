@@ -47,7 +47,7 @@ class Repository(private val dao: DatabaseDao) {
     fun clientWithoutBooksAndWishes(client: Client): Boolean {
         val clientsWithBooks = clientsWithBooks(client)
         val wishABook = wishBooks[client.id]?.isNotEmpty() == true
-        return clientsWithBooks && wishABook
+        return !clientsWithBooks && wishABook
     }
 
     fun clientsWithBooks(client: Client): Boolean {
