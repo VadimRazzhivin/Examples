@@ -3,6 +3,7 @@ package com.library.db
 import com.library.db.entities.BookEntity
 import com.library.db.entities.ClientEntity
 import com.library.db.entities.OwnershipEntity.Companion.assign
+import com.library.utills.checkNotAMainThread
 import java.io.*
 import java.util.*
 import kotlin.random.Random
@@ -14,6 +15,7 @@ class DatabaseManager(private val path: String = DB_PATH) {
     }
 
     fun getDatabase(): Database {
+        checkNotAMainThread()
         return runCatching {
             if (isDatabaseExist()) {
                 readDatabaseFromFile()
@@ -26,6 +28,7 @@ class DatabaseManager(private val path: String = DB_PATH) {
     }
 
     fun updateDatabase(database: Database) {
+        checkNotAMainThread()
         val file = File(path)
         ObjectOutputStream(BufferedOutputStream(FileOutputStream(file))).use {
             it.writeObject(database)
@@ -34,10 +37,12 @@ class DatabaseManager(private val path: String = DB_PATH) {
     }
 
     private fun isDatabaseExist(): Boolean {
+        checkNotAMainThread()
         return File(path).exists()
     }
 
     private fun readDatabaseFromFile(): Database {
+        checkNotAMainThread()
         val file = File(path)
         return ObjectInputStream(BufferedInputStream(FileInputStream(file))).use {
             it.readObject() as Database
@@ -45,6 +50,7 @@ class DatabaseManager(private val path: String = DB_PATH) {
     }
 
     private fun createNewDatabase(): Database {
+        checkNotAMainThread()
         val clients = Collections.synchronizedList(
             mutableListOf(
                 ClientEntity(

@@ -33,7 +33,6 @@ import kotlin.random.Random
  * Создаем проект на github + VCS
  */
 fun main() {
-
     colorPrintln(ConsoleColors.BLUE_BOLD) { "\nSTART\n" }
 
     val databaseManager = DatabaseManager()
