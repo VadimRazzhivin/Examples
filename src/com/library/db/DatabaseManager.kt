@@ -3,17 +3,30 @@ package com.library.db
 import com.library.db.entities.BookEntity
 import com.library.db.entities.ClientEntity
 import com.library.db.entities.OwnershipEntity.Companion.assign
+import com.library.utills.await
 import java.io.*
 import java.util.*
+import java.util.concurrent.ExecutorService
 import kotlin.random.Random
 
-class DatabaseManager(private val path: String = DB_PATH) {
+class DatabaseManager(
+    private val path: String = DB_PATH,
+    private val executorService: ExecutorService,
+) {
 
     private companion object {
         const val DB_PATH = "src/com/library/LibraryDatabase.db"
     }
 
     fun getDatabase(): Database {
+        return executorService.await { getDb() }
+    }
+
+    fun updateDatabase(database: Database) {
+        executorService.execute { updateDb(database) }
+    }
+
+    private fun getDb(): Database {
         return runCatching {
             if (isDatabaseExist()) {
                 readDatabaseFromFile()
@@ -25,7 +38,7 @@ class DatabaseManager(private val path: String = DB_PATH) {
         }
     }
 
-    fun updateDatabase(database: Database) {
+    private fun updateDb(database: Database) {
         val file = File(path)
         ObjectOutputStream(BufferedOutputStream(FileOutputStream(file))).use {
             it.writeObject(database)
