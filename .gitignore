@@ -2,3 +2,6 @@
 /out/
 *.iml
 /__1.kt__.iml
+/lib/
+/src/com/library/LibraryDatabase.db
+/src/com/library/test.db
